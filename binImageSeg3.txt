@@ -1,0 +1,143 @@
+clear all
+
+tic
+
+I1 = imread('C:\Users\OMKAR\Desktop\iitb roads\tumtum.jpg');
+%figure, imshow(I1), title('original image');
+
+I=rgb2gray(I1);
+[~, threshold] = edge(I, 'Sobel');
+fudgeFactor = .5;
+BWs = edge(I,'Sobel', threshold * fudgeFactor);
+%figure, imshow(BWs), title('binary gradient mask');
+
+% % Image thresholding 5 pixel
+% BWs = bwareaopen(BW2, 5);
+
+se90 = strel('line', 3, 90);
+se0 = strel('line', 3, 0);
+
+BWsdil = imdilate(BWs, [se90 se0]);
+%figure, imshow(BWsdil), title('dilated gradient mask');
+
+% BWsdilC = imcomplement(BWsdil)
+% %%%figure, imshow(BWsdilC);
+% title('binary image complimented');
+
+BWd2fill = imfill(BWsdil, 'holes');
+%figure, imshow(BWd2fill);
+title('binary image with filled holes');
+
+% Image thresholding 5 pixel
+BWdfill = bwareaopen(BWd2fill, 105);
+%figure, imshow(BWdfill);
+title( 'After thresholding' );
+
+BWdfillC = imcomplement(BWdfill);
+%figure, imshow(BWdfillC);
+title('binary image with filled holes complimented');
+
+% BWnobord = imclearborder(BWdfillC, 4);
+% %%figure, imshow(BWnobord), title('cleared border image');
+
+seD = strel('diamond',1);
+BWfinal = imerode(BWdfillC,seD);
+BWfinal = imerode(BWfinal,seD);
+%figure, imshow(BWfinal), title('segmented image');
+
+BWdrefill = imfill(BWfinal, 'holes');
+figure, imshow(BWdrefill);
+title('binary image with refilled holes');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+bw = BWdrefill;
+cc = bwconncomp(bw);
+
+L = labelmatrix(cc);
+rgb = label2rgb(L, 'jet', [.7 .7 .7], 'shuffle');
+%figure imshow(rgb), title('image 1')
+
+bw2 = bwdist(bw) <= 2.5;
+
+%imshow(bw2), title('image 2')
+
+
+L2 = labelmatrix(bwconncomp(bw2));
+rgb2 = label2rgb(L2, 'jet', [.7 .7 .7], 'shuffle');
+figure, imshow(rgb2)
+
+
+%L2(~bw) = 0;
+%figure imshow(label2rgb(L2, 'jet', [.7 .7 .7], 'shuffle'))
+
+% % I = BWdrefill;
+% % %imshow(I)
+% % text(732,501,'Image courtesy of Corel(R)',...
+% %      'FontSize',7,'HorizontalAlignment','right')
+% %  hy = fspecial('sobel');
+% %  hx = hy';
+% %  Iy = imfilter(double(I), hy, 'replicate');
+% %  Ix = imfilter(double(I), hx, 'replicate');
+% %  gradmag = sqrt(Ix.^2 + Iy.^2);
+% %  %imshow(gradmag,[]),title('Gradient magnitude (gradmag)')
+% %  L = watershed(gradmag);
+% %  Lrgb = label2rgb(L);
+% %  %imshow(Lrgb), title('Watershed transform of gradient magnitude (Lrgb)')
+% %  se = strel('disk', 5);
+% %  Io = imopen(I, se);
+% % 
+% %  %imshow(Io), title('Opening (Io)')
+% %  Ie = imerode(I, se);
+% %  Iobr = imreconstruct(Ie, I);
+% % 
+% % %imshow(Iobr), title('Opening-by-reconstruction (Iobr)')
+% % Ioc = imclose(Io, se);
+% % %imshow(Ioc), title('Opening-closing (Ioc)')
+% % Iobrd = imdilate(Iobr, se);
+% % Iobrcbr = imreconstruct(imcomplement(Iobrd), imcomplement(Iobr));
+% % Iobrcbr = imcomplement(Iobrcbr);
+% % %imshow(Iobrcbr), title('Opening-closing by reconstruction (Iobrcbr)')
+% % fgm = imregionalmax(Iobrcbr);
+% % 
+% % %imshow(fgm), title('Regional maxima of opening-closing by reconstruction (fgm)')
+% % I2 = I;
+% % I2(fgm) = 255;
+% % 
+% % %imshow(I2), title('Regional maxima superimposed on original image (I2)')
+% % se2 = strel(ones(5,5));
+% % fgm2 = imclose(fgm, se2);
+% % fgm3 = imerode(fgm2, se2);
+% % fgm4 = bwareaopen(fgm3, 20);
+% % I3 = I;
+% % I3(fgm4) = 255;
+% % 
+% % %imshow(I3)
+% % title('Modified regional maxima superimposed on original image (fgm4)')
+% % bw = im2bw(Iobrcbr);
+% % 
+% % %imshow(bw), title('Thresholded opening-closing by reconstruction (bw)')
+% % D = bwdist(bw);
+% % DL = watershed(D);
+% % bgm = DL == 0;
+% % 
+% % %imshow(bgm), title('Watershed ridge lines (bgm)')
+% % gradmag2 = imimposemin(gradmag, bgm | fgm4);
+% % L = watershed(gradmag2);
+% % I4 = I;
+% % I4(imdilate(L == 0, ones(3, 3)) | bgm | fgm4) = 255;
+% % 
+% % %imshow(I4)
+% % title('Markers and object boundaries superimposed on original image (I4)')
+% % Lrgb = label2rgb(L, 'jet', 'w', 'shuffle');
+% % 
+% % %imshow(Lrgb)
+% % title('Colored watershed label matrix (Lrgb)')
+% % 
+% % imshow(I)
+% % hold on
+% % himage = imshow(Lrgb);
+% % himage.AlphaData = 0.3;
+% % title('Lrgb superimposed transparently on original image')
+
+
+toc
