@@ -59,5 +59,38 @@ note: we may have to either pre process the image or not work with the custom bg
     Mat circ_str_elem=getStructuringElement=(MORPH_ELLIPSE,str_elem_dim,anchor);
     erode( img_edge_dilated,img_eroded,circ_str_elem);
 
-return 0;
+    Mat img_flood_fill;
+    Point origin=Point(0,0);
+    
+    floodFill(img_flood_fill,origin,Scalar(255),);   /// got an issue with arguments SCALAR 
+
+    Mat img_openloops_removed;
+
+    morphologyEx(img_flood_fill,img_openloops_removed,MORPH_OPEN,rect_str_elem);  // <------ confirm it 
+
+    Mat img_small_closedloops_removed;
+	morphologyEx(img_openloops_removed,img_small_closedloops_removed,MORPH_OPENCLOSED,rect_str_elem);  // comfirm it 
+
+	Mat img_erode_post_fill1;img_erode_post_erode;
+
+	erode(img_small_closedloops_removed,img_erode_post_fill1,circ_str_elem);
+	erode(img_erode_post_fill1,img_erode_post_erode,circ_str_elem);
+
+	Mat img_final_filled;
+	floodFill(img_final_filled,origin,Scalar(255),);   /// got an issue with arguments SCALAR 
+
+////////////////////////////////////////////////////////////////////////////
+
+	int connected_components_count;
+
+	Mat img_label;
+	connected_components_count=onnectedComponents(img_final_filled,img_label,8,int ltype=cv_32s);
+
+	Mat label;
+	label = // add matlab labelmatrix function equivalent of opencv 
+
+	Mat final_color_segmented;
+	applyColorMap(label,final_color_segmented, COLORMAP_JET);
+ 
+	return 0;
 }
