@@ -48,12 +48,16 @@ note: we may have to either pre process the image or not work with the custom bg
 
     Mat img_edge_dilated;
     Point anchor=Point(-1,-1);
+    Size str_elem_dim_11;
+    str_elem_dim=Size(11,11);
 
-	dilate(edge,img_edge_dilated,/* add some structuring element */,anchor,int iterations=1, int borderType=BORDER_CONSTANT, const Scalar& borderValue=morphologyDefaultBorderValue() );
-	
+    Mat rect_str_elem=getStructuringElement(MORPH_RECT,str_elem_dim,anchor);
 
-	cv::Mat sel = cv::getStructuringElement(MORPH_RECT, cv::Size(9,9)); 
-	erode( src, erosion_dst, element );
+    dilate(edge,img_edge_dilated,rect_str_elem);
+
+    Mat img_eroded;
+    Mat circ_str_elem=getStructuringElement=(MORPH_ELLIPSE,str_elem_dim,anchor);
+    erode( img_edge_dilated,img_eroded,circ_str_elem);
 
 return 0;
 }
