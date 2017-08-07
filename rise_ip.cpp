@@ -10,8 +10,6 @@ using namespace cv;
 using namespace std;
 
 
-
-
 int main()
 {
 	
@@ -27,9 +25,6 @@ int main()
 note: we may have to either pre process the image or not work with the custom bgr to greyscale or both 
 	  as they might not be able to detect edge very well 
 */
-
-
-
 
 	Mat grad_x, grad_y;    // derivative along x and y direction respectively
     Mat square_grad_x, square_grad_y;   // absoute value of derivative 
