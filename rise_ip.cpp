@@ -30,9 +30,9 @@ note: we may have to either pre process the image or not work with the custom bg
     Mat square_grad_x, square_grad_y;   // absoute value of derivative 
 
     /// Gradient  along X direction
-	Sobel( img_bw, grad_x,CV_16S, 1, 0, 3, int scale=1,int delta=0, BORDER_DEFAULT );
+	Sobel( img_bw, grad_x,CV_16S, 1, 0, 3, 1,0, BORDER_DEFAULT );
 	/// Gradient  along y direction
-	Sobel( image_bw, grad_y,CV_16S, 0, 1, 3,int scale=1,int delta=0, BORDER_DEFAULT );
+	Sobel( img_bw, grad_y,CV_16S, 0, 1, 3, 1, 0, BORDER_DEFAULT );
 
 	square_grad_y=grad_y.mul(grad_y);
 	square_grad_x=grad_x.mul(grad_x);
@@ -44,14 +44,14 @@ note: we may have to either pre process the image or not work with the custom bg
     Mat img_edge_dilated;
     Point anchor=Point(-1,-1);
     Size str_elem_dim_11;
-    str_elem_dim=Size(11,11);
+    str_elem_dim_11=Size(11,11);
 
-    Mat rect_str_elem=getStructuringElement(MORPH_RECT,str_elem_dim,anchor);
+    Mat rect_str_elem=getStructuringElement(MORPH_RECT,str_elem_dim_11,anchor);
 
-    dilate(edge,img_edge_dilated,rect_str_elem);
+    dilate(img_edge,img_edge_dilated,rect_str_elem);
 
     Mat img_eroded;
-    Mat circ_str_elem=getStructuringElement=(MORPH_ELLIPSE,str_elem_dim,anchor);
+    Mat circ_str_elem=getStructuringElement(MORPH_ELLIPSE,str_elem_dim_11,anchor);
     erode( img_edge_dilated,img_eroded,circ_str_elem);
 
     Mat img_flood_fill;

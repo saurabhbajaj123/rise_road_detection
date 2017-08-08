@@ -1,0 +1,24 @@
+0.222924 - binary gradient mask - edge detection
+0.151710 - dilated gradient mask - after dillation
+0.065385 - binary image with filled holes - filling the holes
+0.027902 - After thresholding - small discrete holes removed
+0.002873 - binary image with filled holes complimented -complementary image
+0.058778 - segmented image - erosion done
+0.015284 - binary image with refilled holes - 
+0.098183 - image 2 - distance transform
+0.013001 - last coloured image
+0.65604 - total
+
+
+c++ time delays
+
+0.0045s - 480*480 png image load 
+0.036s - 1368*768 png image load
+0.0368 -rgb to grey. 480*480
+0.0009 - edge detection
+0.000414 dilation 480*480
+0.04745 -480*480 png image load  
+0.00255 -Dilate 1360*768
+0.005- edge detect 1360*768
+0.035- rgb2grey 1368*768
+0.048-Imload-1369*768
