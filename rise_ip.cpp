@@ -39,7 +39,7 @@ note: we may have to either pre process the image or not work with the custom bg
 
 	Mat img_edge;
 
-    addWeighted( square_grad_x,1, square_grad_y, 0.5, 0,edge);    // more weight is provided in the horizontal direction for more importance to lane detection
+    addWeighted( square_grad_x,1, square_grad_y, 0.5, 0,img_edge);    // more weight is provided in the horizontal direction for more importance to lane detection
 
     Mat img_edge_dilated;
     Point anchor=Point(-1,-1);
@@ -55,7 +55,7 @@ note: we may have to either pre process the image or not work with the custom bg
     erode( img_edge_dilated,img_eroded,circ_str_elem);
 
     Mat img_flood_fill;
-    Point origin=Point(0,0);
+    Point origin=Point(0,0);  // is this have to be origin or (-1,-1) ?
     
     floodFill(img_flood_fill,origin,Scalar(255),);   /// got an issue with arguments SCALAR 
 
