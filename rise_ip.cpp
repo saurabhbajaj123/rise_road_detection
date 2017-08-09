@@ -49,15 +49,15 @@ note: we may have to either pre process the image or not work with the custom bg
     Mat rect_str_elem=getStructuringElement(MORPH_RECT,str_elem_dim_11,anchor);
 
     dilate(img_edge,img_edge_dilated,rect_str_elem);
-
+/*
     Mat img_eroded;
     Mat circ_str_elem=getStructuringElement(MORPH_ELLIPSE,str_elem_dim_11,anchor);
     erode( img_edge_dilated,img_eroded,circ_str_elem);
-
+*/
     Mat img_flood_fill;
     Point origin=Point(0,0);  // is this have to be origin or (-1,-1) ?
     
-    floodFill(img_flood_fill,origin,Scalar(255),);   /// got an issue with arguments SCALAR 
+    floodFill(img_flood_fill,origin,Scalar(255),0,Scalar(),Scalar(),4);   /// got an issue with arguments SCALAR 
 
     Mat img_openloops_removed;
 
