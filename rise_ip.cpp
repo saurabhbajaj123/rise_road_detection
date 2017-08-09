@@ -75,7 +75,7 @@ note: we may have to either pre process the image or not work with the custom bg
 	floodFill(img_erode_post_fill1,img_final_filled,origin,Scalar(255),0,Scalar(),Scalar(),4);   /// got an issue with arguments SCALAR 
 
 ////////////////////////////////////////////////////////////////////////////
-
+/*
 	int connected_components_count;	
 
 	Mat img_label;
@@ -86,6 +86,6 @@ note: we may have to either pre process the image or not work with the custom bg
 
 	Mat final_color_segmented;
 	applyColorMap(label,final_color_segmented, COLORMAP_JET);
- 
+ */
 	return 0;
 }
