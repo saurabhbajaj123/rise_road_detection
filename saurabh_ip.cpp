@@ -94,6 +94,14 @@ note: we may have to either pre process the image or not work with the custom bg
     Mat img_flood_fill2=Mat::zeros( img_edge_dilated.rows + 2, img_edge_dilated.cols + 2, CV_8UC1 );
     img_eroded1.convertTo(img_eroded1,CV32S);
     floodFill(img_eroded1,img_flood_fill2,origin,Scalar(255),&rect,Scalar(20),Scalar(20),4); 
+
+
+    
+    Mat labelImage(img_flood_fill2.size(), CV_8UC1);
+    int nLabels = connectedComponents(img_flood_fill2, labelImage, 8);    
+
+    Mat img_color_coded;
+    applyColorMap(labelImage,img_color_coded,COLORMAP_JET);
     
 
 
