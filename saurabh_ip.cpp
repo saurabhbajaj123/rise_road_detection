@@ -9,7 +9,8 @@
 using namespace cv;
 using namespace std;
 
-
+ /*sxlp;'
+ '
 string type2str(int type) {
   string r;
 
@@ -32,18 +33,13 @@ string type2str(int type) {
 
   return r;
 }
+*/
 
 
 int main()
 {
-	
-	//char dir[100]={"/home/sedrica/Desktop/images.jpg"};
-
-
 	Mat img_bw=imread("tumtum.jpg", 0); // reading the rgb image in Mat data struct
 
-	//Mat img_bw;
-	//cvtColor(img, img_bw,COLOR_RGB2GRAY);  // conversion to greayscale
 /*
 note: we may have to either pre process the image or not work with the custom bgr to greyscale or both 
 	  as they might not be able to detect edge very well 
@@ -66,24 +62,45 @@ note: we may have to either pre process the image or not work with the custom bg
 
     Mat img_edge_dilated;
     Point anchor=Point(-1,-1);
-    Size str_elem_dim_11;
-    str_elem_dim_11=Size(5,5);
+    
+    Size str_elem_dim_55;
+    str_elem_dim_55=Size(5,5);
 
-    Mat rect_str_elem=getStructuringElement(MORPH_RECT,str_elem_dim_11,anchor);
+    Size str_elem_dim_11;
+    str_elem_dim_11=Size(11,11);
+    
+
+    Mat rect_str_elem=getStructuringElement(MORPH_CROSS,str_elem_dim_55,anchor);
 
     dilate(img_edge,img_edge_dilated,rect_str_elem);
-
-    Mat img_eroded;
-    Mat circ_str_elem=getStructuringElement(MORPH_ELLIPSE,str_elem_dim_11,anchor);
-    erode( img_edge_dilated,img_eroded,circ_str_elem);
-    img_edge_dilated=img_eroded;
-    Mat mask;   
+    //Mat mask;      
     img_edge_dilated.convertTo(img_edge_dilated, CV_32S);
-
     Mat img_flood_fill=Mat::zeros( img_edge_dilated.rows + 2, img_edge_dilated.cols + 2, CV_8UC1 );
     Point origin=Point(2,24);  // is this have to be origin or (-1,-1) ?
     Rect rect;
-    floodFill(img_edge_dilated,img_flood_fill,origin,Scalar(255),&rect,Scalar(20),Scalar(20),4);   /// got an issue with arguments SCALAR 
+    floodFill(img_edge_dilated,img_flood_fill,origin,Scalar(255),&rect,Scalar(20),Scalar(20),4); 
+
+    Mat img_openloops_removed; 
+    morphologyEx(img_flood_fill,img_openloops_removed,MORPH_OPEN,rect_str_elem);  // <------ confirm it 
+    
+    Mat img_compliment;
+    bitwise_not(img_openloops_removed,img_compliment);
+
+    Mat img_eroded0,img_eroded1;
+    Mat circ_str_elem=getStructuringElement(MORPH_ELLIPSE,str_elem_dim_55,anchor);
+    erode(img_compliment,img_eroded0,circ_str_elem);
+    erode(img_eroded0,img_eroded1,circ_str_elem);
+
+    Mat img_flood_fill2=Mat::zeros( img_edge_dilated.rows + 2, img_edge_dilated.cols + 2, CV_8UC1 );
+    img_eroded1.convertTo(img_eroded1,CV32S);
+    floodFill(img_eroded1,img_flood_fill2,origin,Scalar(255),&rect,Scalar(20),Scalar(20),4); 
+    
+
+
+
+    
+
+      /// got an issue with arguments SCALAR 
     //floodFill(img_edge_dilated,,Scalar(255,255,255),rect,Scalar(0),Scalar(0),4);   /// got an issue with arguments SCALAR 
     //floodFill(img_edge_dilated,origin,Scalar(255));
     
@@ -123,11 +140,9 @@ note: we may have to either pre process the image or not work with the custom bg
 
 
 
-    Mat img_openloops_removed; 
+    
     //= Mat::zeros( img_edge_dilated.rows + 2, img_edge_dilated.cols + 2, CV_8UC1 );
 
-    morphologyEx(img_edge_dilated,img_openloops_removed,MORPH_OPEN,rect_str_elem);  // <------ confirm it 
-    
     imshow("asdf",img_openloops_removed);
 	waitKey(0);
 /*
